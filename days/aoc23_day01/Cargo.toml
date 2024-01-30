@@ -1,6 +1,5 @@
-workspace = { members = ["days/aoc23_day01"] }
 [package]
-name = "rust-advent-of-code"
+name = "aoc23_day01"
 version = "0.1.0"
 edition = "2021"
 
