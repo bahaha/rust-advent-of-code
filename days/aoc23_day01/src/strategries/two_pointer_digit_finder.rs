@@ -3,6 +3,8 @@ use super::DigitFinder;
 pub struct TwoPointersDigitFinder;
 
 impl DigitFinder for TwoPointersDigitFinder {
+    fn name(&self) -> &'static str { "Two pointers" }
+
     fn find_digits(&self, line: &str) -> u32 {
         let bytes = line.as_bytes();
         let mut ten_digit = None;

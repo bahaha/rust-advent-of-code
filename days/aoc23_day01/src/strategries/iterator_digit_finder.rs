@@ -3,6 +3,8 @@ use super::DigitFinder;
 pub struct IteratorDigitFinder;
 
 impl DigitFinder for IteratorDigitFinder {
+    fn name(&self) -> &'static str { "Iterator" }
+
     fn find_digits(&self, line: &str) -> u32 {
         let mut ten_digit = None;
         let mut unit_digit = None;
