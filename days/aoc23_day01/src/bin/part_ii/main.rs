@@ -3,38 +3,6 @@ fn main() {
     println!("Sum of calibration numbers: {}", sum_numeric_calibration_nums(input));
 }
 
-fn sum_numeric_calibration_nums(message: &str) -> u32 {
-    message.lines().map(|line| find_digit(line)).sum()
-}
-
-fn find_numeric_digit(text: &str, forward: bool) -> Option<u32> {
-    let mut potential_digit = None;
-    let len = text.len();
-    let char_at = |i: usize| if forward { text.chars().nth(i) } else { text.chars().nth(len - 1 - i) }; 
-
-    for i in 0..len {
-        let c = char_at(i)?;
-        potential_digit = c.to_digit(10);
-        for digits in 3..=5 {
-            if potential_digit.is_none() && i + digits < len {
-                let start = if forward { i } else { len - (i + digits) };
-                let num_candidate = &text[start..start+digits];
-                potential_digit = num_candidate.to_digit();
-            }
-        }
-        if potential_digit.is_some() {
-            break;
-        }
-    }
-    potential_digit
-}
-
-fn find_digit(line: &str) -> u32 {
-    let ten_digit = find_numeric_digit(line, true);
-    let unit_digit = find_numeric_digit(line, false);
-    ten_digit.unwrap_or(0) * 10 + unit_digit.unwrap_or(0)
-}
-
 trait Numeric {
     fn to_digit(&self) -> Option<u32>;
 }
@@ -55,6 +23,35 @@ impl Numeric for &str {
         }
     }
 }
+
+fn find_digit(line: &str) -> u32 {
+    let ten_digit = find_numeric_digit(line, true);
+    let unit_digit = find_numeric_digit(line, false);
+    ten_digit.unwrap_or(0) * 10 + unit_digit.unwrap_or(0)
+}
+
+fn sum_numeric_calibration_nums(message: &str) -> u32 {
+    message.lines().map(|line| find_digit(line)).sum()
+}
+
+fn find_numeric_digit(text: &str, forward: bool) -> Option<u32> {
+    let chars = text.chars().collect::<Vec<char>>();
+    let len = chars.len();
+
+    for i in 0..len {
+        let c = if forward { chars[i] } else { chars[len - i - 1] };
+        if let Some(digit) = c.to_digit(10) { return Some(digit) }
+        for digits in 3..=5 {
+            if i + digits < len {
+                let start = if forward { i } else { len - (i + digits) };
+                let numeric_text = &text[start..start+digits];
+                if let Some(digit) = numeric_text.to_digit() { return Some(digit) }
+            }
+        }
+    }
+    None
+}
+
 
 #[cfg(test)]
 mod tests {
