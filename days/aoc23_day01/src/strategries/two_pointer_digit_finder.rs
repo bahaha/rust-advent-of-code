@@ -3,9 +3,11 @@ use super::DigitFinder;
 pub struct TwoPointersDigitFinder;
 
 impl DigitFinder for TwoPointersDigitFinder {
-    fn name(&self) -> &'static str { "Two pointers" }
+    fn name(&self) -> &'static str {
+        "Two pointers"
+    }
 
-    fn find_digits(&self, line: &str) -> u32 {
+    fn find_digit(&self, line: &str) -> u32 {
         let bytes = line.as_bytes();
         let mut ten_digit = None;
         let mut unit_digit = None;
@@ -29,19 +31,16 @@ impl DigitFinder for TwoPointersDigitFinder {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    
     #[test]
     fn test_find_digit_from_line() {
         let finder = TwoPointersDigitFinder;
-        assert_eq!(finder.find_digits("1abc2"), 12);
-        assert_eq!(finder.find_digits("pqr3stu8vwx"), 38);
-        assert_eq!(finder.find_digits("a1b2c3d4e5f"), 15);
-        assert_eq!(finder.find_digits("treb7uchet"), 77);
+        assert_eq!(finder.find_digit("1abc2"), 12);
+        assert_eq!(finder.find_digit("pqr3stu8vwx"), 38);
+        assert_eq!(finder.find_digit("a1b2c3d4e5f"), 15);
+        assert_eq!(finder.find_digit("treb7uchet"), 77);
     }
 }
-
