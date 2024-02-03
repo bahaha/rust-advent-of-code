@@ -1,6 +1,6 @@
 use std::{cmp::max, collections::HashMap};
 
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
 enum CubeColor {
     Blue,
     Green,
@@ -70,21 +70,15 @@ impl Game {
     }
 
     fn get_cubes_package_threshold(&self) -> CubePackage {
-        let mut max_blue = 0;
-        let mut max_green = 0;
-        let mut max_red = 0;
-
-        for game_set in &self.game_sets {
-            for cube in &game_set.cubes {
-                match cube.color {
-                    CubeColor::Blue => max_blue = max(max_blue, cube.quantity),
-                    CubeColor::Green => max_green = max(max_green, cube.quantity),
-                    CubeColor::Red => max_red = max(max_red, cube.quantity),
+        self.game_sets
+            .iter()
+            .fold(CubePackage::new(0, 0, 0), |mut acc, game_set| {
+                for cube in &game_set.cubes {
+                    let count = acc.cubes.entry(cube.color).or_insert(0);
+                    *count = max(*count, cube.quantity);
                 }
-            }
-        }
-
-        CubePackage::new(max_blue, max_green, max_red)
+                acc
+            })
     }
 
     fn get_cube_products_num(&self) -> u32 {
